@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:layout_width="?actionBarSize"
+    android:layout_height="?actionBarSize">
+
+    <com.lh.fractal.CircleProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:progressColor="@android:color/white"
+        app:textSize="10dp"
+        android:id="@+id/progress_bar" />
+
+</FrameLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/progress"
+        android:title="刷新"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/begin_draw"
+        android:title="开始计算" />
+    <item
+        android:id="@+id/save"
+        android:title="保存" />
+    <item
+        android:id="@+id/reset_size"
+        android:title="恢复默认大小" />
+    <item
+        android:id="@+id/iterate_times"
+        android:title="迭代次数" />
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/julia"
+            android:checkable="true"
+            android:checked="true"
+            android:title="Julia集" />
+        <item
+            android:id="@+id/mandelbrot"
+            android:checkable="true"
+            android:checked="false"
+            android:title="Mandelbrot集" />
+    </group>
+</menu>

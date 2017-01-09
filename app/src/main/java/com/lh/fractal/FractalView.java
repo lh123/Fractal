@@ -10,9 +10,7 @@ import android.graphics.SurfaceTexture;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.ViewConfiguration;
@@ -22,9 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by home on 2017/1/3.
@@ -51,7 +48,7 @@ public class FractalView extends TextureView {
     private float mMaxY;
 
     private Surface mSurface;
-    private CompositeSubscription mWorksSubscriptions;
+    private CompositeDisposable mWorksDisposables;
     private Bitmap mBitmap;
     private final Object mLock = new Object();
 
@@ -286,8 +283,8 @@ public class FractalView extends TextureView {
                 mSurface.release();
                 mSurface = null;
             }
-            if (mWorksSubscriptions != null && !mWorksSubscriptions.isUnsubscribed()) {
-                mWorksSubscriptions.unsubscribe();
+            if (mWorksDisposables != null && !mWorksDisposables.isDisposed()) {
+                mWorksDisposables.dispose();
             }
             return false;
         }
@@ -312,8 +309,8 @@ public class FractalView extends TextureView {
         mMatrix.reset();
         Canvas canvas = new Canvas(mBitmap);
         canvas.drawColor(Color.WHITE);
-        if (mWorksSubscriptions != null && !mWorksSubscriptions.isUnsubscribed()) {
-            mWorksSubscriptions.unsubscribe();
+        if (mWorksDisposables != null && !mWorksDisposables.isDisposed()) {
+            mWorksDisposables.dispose();
         }
 
         final ArrayList<Rect> list = new ArrayList<>(COUNT * COUNT);
@@ -326,11 +323,11 @@ public class FractalView extends TextureView {
         mTotalProgress = list.size();
         mProgress = 0;
 //        Collections.shuffle(list);
-        mWorksSubscriptions = new CompositeSubscription();
+        mWorksDisposables = new CompositeDisposable();
         for (final Rect rect : list)
-            mWorksSubscriptions.add(Schedulers.computation().createWorker().schedule(new Action0() {
+            mWorksDisposables.add(Schedulers.computation().createWorker().schedule(new Runnable() {
                 @Override
-                public void call() {
+                public void run() {
                     synchronized (mLock) {
                         calculateBitmap(rect, mComplex.re, mComplex.im);
                     }

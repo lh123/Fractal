@@ -19,7 +19,8 @@ import com.lh.permissionlibrary.RxPermission;
 import java.io.File;
 import java.io.IOException;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
+
 
 public class MainActivity extends AppCompatActivity implements FractalView.OnProgressChangeListener {
 
@@ -87,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements FractalView.OnPro
         } else if (item.getItemId() == R.id.save) {
             RxPermission.getInstance(this)
                     .requset(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(new Action1<Boolean>() {
+                    .subscribe(new Consumer<Boolean>() {
                         @Override
-                        public void call(Boolean aBoolean) {
+                        public void accept(Boolean aBoolean) throws Exception {
                             if (aBoolean) {
                                 saveToFile();
                             } else {
